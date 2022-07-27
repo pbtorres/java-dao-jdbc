@@ -48,7 +48,7 @@ public class SellerDaoJDBC implements SellerDao {
 		
 		try {
 			st = conn.prepareStatement(
-					"SELECT seller.*,department.name as 'DepNmame' FROM seller "
+					"SELECT seller.*,department.name as 'DepName' FROM seller "
 					+ "INNER JOIN department "
 					+ "ON seller.DepartmentId = department.id "
 					+ "where seller.id = ?");
@@ -69,17 +69,48 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatment(st);
 			DB.closeResultSet(rs);
 		}
-		
 	}
 
 	@Override
-	public List<Seller> findall() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Seller> findAll() {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement(
+					"SELECT seller.*,department.name AS 'DepName' FROM seller "
+					+ "INNER JOIN department "
+					+ "ON seller.DepartmentId = department.id "
+					+ "ORDER BY Name");
+			
+			rs = st.executeQuery();
+			List<Seller> list = new ArrayList<>();
+			Map<Integer, Department> map = new HashMap<>();
+			
+			while(rs.next()) {
+				Department dep = map.get(rs.getInt("DepartmentID"));
+				
+				if(dep == null) {
+					dep = instantiateDepartment(rs);
+					map.put(rs.getInt("DepartmentID"), dep);
+				}
+				
+				Seller obj = instantiateSeller(rs, dep);
+				list.add(obj);
+			}
+			return list;
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatment(st);
+			DB.closeResultSet(rs);
+		}
 	}
 	
 	private Department instantiateDepartment (ResultSet rs) throws SQLException {
-		Department dep = new Department(rs.getInt("DepartmentId"), rs.getString("DepNmame"));
+		Department dep = new Department(rs.getInt("DepartmentId"), rs.getString("DepName"));
 		return dep;
 	}
 	
@@ -100,7 +131,7 @@ public class SellerDaoJDBC implements SellerDao {
 		
 		try {
 			st = conn.prepareStatement(
-					"SELECT seller.*,department.name as 'DepNmame' FROM seller "
+					"SELECT seller.*,department.name as 'DepName' FROM seller "
 					+ "INNER JOIN department "
 					+ "ON seller.DepartmentId = department.id "
 					+ "where department.id = ? "
