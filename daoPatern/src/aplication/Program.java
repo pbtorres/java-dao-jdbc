@@ -7,6 +7,7 @@ import java.util.Scanner;
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.dao.SellerDao;
+import model.dao.impl.DepartmentDaoJDBC;
 import model.entities.Department;
 import model.entities.Seller;
 
@@ -82,7 +83,13 @@ public class Program {
 		System.out.println(dep);
 		System.out.println("\n=============================\n");
 		
+		System.out.println("\n====== Department Insert ======\n");
+		dep = new Department(null, "Sports");
+		departmentDao.insert(dep);
 
+		System.out.println(dep);
+		System.out.println("\n=============================\n");
+		
 		sc.close();
 	}
 
