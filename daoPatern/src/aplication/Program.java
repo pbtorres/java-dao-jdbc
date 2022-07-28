@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.dao.DaoFactory;
+import model.dao.DepartmentDao;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
@@ -15,6 +16,7 @@ public class Program {
 		Scanner sc = new Scanner(System.in);
 
 		SellerDao sellerDao = DaoFactory.createSellerDao();
+		DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 		
 		System.out.println("====== Seller findById ======\n");
 		Seller seller = sellerDao.findById(5);
@@ -63,6 +65,14 @@ public class Program {
 		sellerDao.deleteByID(id);
 		
 		System.out.println("Delete completed!");
+		System.out.println("\n=============================\n");
+		
+		System.out.println("\n====== Department findAll ======\n");
+		List<Department> listDep = departmentDao.findall();
+		
+		for (Department obj : listDep) {
+			System.out.println(obj);
+		}
 		System.out.println("\n=============================\n");
 
 		sc.close();
