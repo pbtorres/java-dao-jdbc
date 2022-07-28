@@ -90,6 +90,14 @@ public class Program {
 		System.out.println(dep);
 		System.out.println("\n=============================\n");
 		
+		System.out.println("\n====== Department update ======\n");
+		dep = departmentDao.findById(2);
+		dep.setName("Games");
+		departmentDao.update(dep);
+		
+		System.out.println("Update completed!");
+		System.out.println("\n=============================\n");
+		
 		sc.close();
 	}
 
