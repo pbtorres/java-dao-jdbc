@@ -36,8 +36,11 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			if(rowsAffected > 0){
 				rs = st.getGeneratedKeys();
 				if(rs.next()) {
-				obj.setId(rs.getInt(1));
+					obj.setId(rs.getInt(1));
 				}
+			}
+			else {
+				throw new DbException("Unexpected error! No rows affected!");
 			}
 		}
 		catch(SQLException e) {
@@ -73,8 +76,27 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void deleteByID(Integer id) {
-		// TODO Auto-generated method stub
-
+		PreparedStatement st = null;
+		
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM department "
+					+ "WHERE Id = ?");
+			st.setInt(1, id);
+			
+			int rowsAffected = st.executeUpdate();
+			
+			if(rowsAffected == 0) {
+				throw new DbException("Id not found!");
+			}
+			
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatment(st);
+		}
 	}
 
 	@Override

@@ -98,6 +98,14 @@ public class Program {
 		System.out.println("Update completed!");
 		System.out.println("\n=============================\n");
 		
+		System.out.println("\n====== Department delete ======\n");
+		System.out.println("Enter id for delete: ");
+		int id = sc.nextInt();
+		departmentDao.deleteByID(id);
+		
+		System.out.println("Delete completed!");
+		System.out.println("\n=============================\n");
+		
 		sc.close();
 	}
 
